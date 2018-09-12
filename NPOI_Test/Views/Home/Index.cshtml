@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<style type="text/css">
+    #excelFile {
+        visibility: hidden;
+    }
+</style>
+
+
+<h2>Index</h2>
+
+
+<!--表单的字符类型需要修改为：multipart/form-data-->
+<form action="/Home/UploadFile" method="post" enctype="multipart/form-data">
+    <!--文件类型的表单控件必须添加 name属性，否则后台将无法获取到上传的文件-->
+    <input type="file" name="uploadObj" />
+    <input type="submit" value="点击上传" />
+</form>
