@@ -111,13 +111,13 @@ namespace NPOI_Test
                     sheet = workbook.GetSheet(sheetName);
                     if (sheet == null) //如果没有找到指定的sheetName对应的sheet，则尝试获取第一个sheet
                     {
-                        //sheet = workbook.GetSheetAt(0);   //第一场sheet不是需要的数据表
+                        //sheet = workbook.GetSheetAt(0);   //第一张sheet不是需要的数据表
                         sheet = workbook.GetSheetAt(1);
                     }
                 }
                 else
                 {
-                    //sheet = workbook.GetSheetAt(0);   //第一场sheet不是需要的数据表
+                    //sheet = workbook.GetSheetAt(0);   //第一张sheet不是需要的数据表
                     sheet = workbook.GetSheetAt(1);
                 }
                 if (sheet != null)
