@@ -48,6 +48,7 @@ namespace NPOI_Test.Controllers
 
         /// <summary>
         /// NPOI方式导出excel
+        ///     直接导出
         /// </summary>
         /// <returns></returns>
         public FileResult ExportStu2()
@@ -88,7 +89,29 @@ namespace NPOI_Test.Controllers
             return File(ms, "application/vnd.ms-excel", "第一批电脑派位生名册.xls");
         }
 
+        /// <summary>
+        /// datatable转换成excel文件，并保存到本地服务器
+        /// </summary>
+        public void SaveFileByLocal()
+        {
+            //1.创建EXCEL中的Workbook  
+            HSSFWorkbook myHSSFworkbook = new HSSFWorkbook();
+            //2.创建Workbook中的Sheet  
+            NPOI.SS.UserModel.ISheet mysheetHSSF = myHSSFworkbook.CreateSheet("sheet1");
+            //3.创建Sheet中的Row  
+            NPOI.SS.UserModel.IRow rowHSSF = mysheetHSSF.CreateRow(0);
+            // SetCellValue 有5个重载方法 bool、DateTime、double、string、IRichTextString(未演示)  
+            rowHSSF.CreateCell(0).SetCellValue(true);
+            rowHSSF.CreateCell(1).SetCellValue(System.DateTime.Now);
+            rowHSSF.CreateCell(2).SetCellValue(9.32);
+            rowHSSF.CreateCell(3).SetCellValue("Hello World！");
 
+            //5.保存  
+            using (FileStream fileHSSF = new FileStream(@"E:\myHSSFworkbook.xls", FileMode.Create))
+            {
+                myHSSFworkbook.Write(fileHSSF);
+            }
+        }
 
 
         /// <summary>
