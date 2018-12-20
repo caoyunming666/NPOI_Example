@@ -31,8 +31,6 @@ namespace NPOI_Test.Controllers
         public ActionResult UploadFile()
         {
 
-            // web git test：本次测试 在vs中推送后，不再直接拉取，而是先提取，本次依然不修改同一文件。
-
             //继续使用vs提交修改代码02
             int success = 0;
             string message = "成功";

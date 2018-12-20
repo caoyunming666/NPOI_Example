@@ -20,7 +20,14 @@ namespace NPOI_Test
         public ExcelHelper(string fileName)
         {
             //web git 提交测试：本次修改避开controller文件的修改，测试目的：在vs推送后是否会进入冲突流程
-        
+
+            /* 
+             * 测试结果：
+             *  在本地使用vs直接推送后，失败！提示 远程已有新的提交，推送本次提交会导致
+             *  不自然的分支快进。
+             *  在直接拉去后，没有进入冲突流程
+             */
+
             this.fileName = fileName;
             disposed = false;
         }
