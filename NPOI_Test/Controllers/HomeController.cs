@@ -15,22 +15,6 @@ namespace NPOI_Test.Controllers
         public ActionResult Index()
         {
 
-            //我是VS2015 git测试
-
-            //继续测试
-
-            //再次测试
-
-            //还原测试01
-            
-            //还原测试02
-
-            //vs提交
-            
-            //使用web git修改文件
-
-            //使用vs2015修改文件
-
             return View();
         }
 
