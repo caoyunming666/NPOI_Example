@@ -147,14 +147,12 @@ namespace NPOI_Test
                     sheet = workbook.GetSheet(sheetName);
                     if (sheet == null) //如果没有找到指定的sheetName对应的sheet，则尝试获取第一个sheet
                     {
-                        //sheet = workbook.GetSheetAt(0);   //第一张sheet不是需要的数据表
-                        sheet = workbook.GetSheetAt(1);
+                        sheet = workbook.GetSheetAt(0);
                     }
                 }
                 else
                 {
-                    //sheet = workbook.GetSheetAt(0);   //第一张sheet不是需要的数据表
-                    sheet = workbook.GetSheetAt(1);
+                    sheet = workbook.GetSheetAt(0);
                 }
                 if (sheet != null)
                 {
@@ -162,17 +160,12 @@ namespace NPOI_Test
                     int cellCount = firstRow.LastCellNum; //一行最后一个cell的编号 即总的列数
 
                     /* 
-                     * 下面两段代码主要是逐一读取每行每列数据，并插入到 datatable 中，把整个excel数据转成dt。
-                     * 如果觉得操作 dt 比较麻烦，也可以直接把excel数据读出后，存到一个list中
-                     *      第一行的列名不要，直接从第二行读取，把每行数据在代码中抽象为一个实体，每一列都是这个实体内的一个属性，
-                     *      遍历一行就是 实例化 一个实体，遍历每一个列 就给这个实体的列赋值。一行操作完成后把实体 add 到list中，
-                     *      开始处理剩下行。
+                     * 下面ifelse代码块为 DataTable 创建列头，即使调用此方法时已经注明 第一行不是标题。
+                     *  DataTable如果不创建DataColumn会报错：无法找到列 0。
                      */
-
-                    #region 确定第一行是列名还是数据行
-
                     if (isFirstRowColumn)
                     {
+                        //拿到表格标题
                         for (int i = firstRow.FirstCellNum; i < cellCount; ++i)
                         {
                             ICell cell = firstRow.GetCell(i);
@@ -190,13 +183,24 @@ namespace NPOI_Test
                     }
                     else
                     {
+                        //拿到表格标题
+                        for (int i = firstRow.FirstCellNum; i < cellCount; ++i)
+                        {
+                            ICell cell = firstRow.GetCell(i);
+                            if (cell != null)
+                            {
+                                string cellValue = cell.StringCellValue;
+                                if (cellValue != null)
+                                {
+                                    DataColumn column = new DataColumn(cellValue + i);
+                                    data.Columns.Add(column);
+                                }
+                            }
+                        }
                         startRow = sheet.FirstRowNum;
                     }
 
-                    #endregion
-
-                    #region 处理剩下的行数据
-
+                    //最后一行的标号
                     int rowCount = sheet.LastRowNum;
                     for (int i = startRow; i <= rowCount; ++i)
                     {
@@ -207,14 +211,10 @@ namespace NPOI_Test
                         for (int j = row.FirstCellNum; j < cellCount; ++j)
                         {
                             if (row.GetCell(j) != null) //同理，没有数据的单元格都默认是null
-                            {
                                 dataRow[j] = row.GetCell(j).ToString();
-                            }
                         }
                         data.Rows.Add(dataRow);
                     }
-
-                    #endregion
                 }
 
                 return data;
@@ -225,6 +225,8 @@ namespace NPOI_Test
                 return null;
             }
         }
+
+
 
         public void Dispose()
         {

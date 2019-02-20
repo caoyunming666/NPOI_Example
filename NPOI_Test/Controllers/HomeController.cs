@@ -115,6 +115,48 @@ namespace NPOI_Test.Controllers
             return File(ms, "application/vnd.ms-excel", "第一批电脑派位生名册.xls");
         }
 
+
+
+        /// <summary>
+        /// 将excel中的数据导入到DataTable中
+        /// </summary>
+        /// <param name="file"></param>
+        public void TestExcelRead1(string file)
+        {
+            try
+            {
+                using (ExcelHelper excelHelper = new ExcelHelper(file))
+                {
+                    DataTable dt = excelHelper.ExcelToDataTable(null, false);
+
+                    if (dt != null)
+                    {
+                        // do something...
+                        WriteSQLFile(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.Message);
+            }
+        }
+
+        public void WriteSQLFile(DataTable dt)
+        {
+            string filePath = AppDomain.CurrentDomain.BaseDirectory + "/sql" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".sql";
+            using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite))
+            {
+                string content = string.Empty;
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    content += string.Format("insert into #TmpJobNo values('{0}'); \r\n", dt.Rows[i][0]);
+                }
+                byte[] data = System.Text.Encoding.UTF8.GetBytes(content);//获得字节数组
+                fs.Write(data, 0, data.Length);//开始写入
+            }
+        }
+
         /// <summary>
         /// datatable转换成excel文件，并保存到本地服务器
         /// </summary>
